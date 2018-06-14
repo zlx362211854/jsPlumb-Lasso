@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>jsPlumb Demo 2</title>
+    <link rel="stylesheet" type="text/css" href="jquery-ui-1.10.4.css" />
+    <script type="text/javascript" src="jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="jquery-ui-1.10.4.js"></script>
+    <script type="text/javascript" src="jsPlumb-2.1.7.js"></script>
+    <script type="text/javascript" src="jsPlumbLsaao.js"></script>
+
+    <style type="text/css">
+        #node1 {
+            left: 15px;
+            top: 100px;
+        }
+
+        #node2 {
+            left: 15px;
+            top: 200px;
+        }
+
+        #node3 {
+            left: 15px;
+            top: 300px;
+        }
+
+        #node4 {
+            left: 15px;
+            top: 400px;
+        }
+
+        #left {
+            border: 1px solid #00bfff;
+            width: 200px;
+            height: 750px;
+            position: absolute;
+        }
+
+        #right {
+            border: 1px solid #00bfff;
+            width: 1024px;
+            position: absolute;
+            height: 750px;
+            left: 215px;
+        }
+
+        .node {
+            box-shadow: 2px 2px 19px #aaa;
+            border-radius: 0.5em;
+            border: 1px solid #346789;
+            width: 100px;
+            text-align: center;
+            position: absolute;
+            background-color: #eeeeef;
+            color: black;
+            padding: 10px;
+            font-size: 9pt;
+            cursor: pointer;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .node:hover {
+            box-shadow: 2px 2px 19px #444;
+            opacity: 0.8;
+        }
+
+        /* lasso style */
+
+        .lasso {
+            position: absolute;
+            border: 1px solid #ddd;
+            background-color: #eee;
+            opacity: 0.4;
+        }
+
+        .lasso_checked_nodes {
+            border: 2px solid #00bfff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="left">
+        <div class="node" id="node1">A</div>
+        <div class="node" id="node2">B</div>
+        <div class="node" id="node3">C</div>
+        <div class="node" id="node4">D</div>
+    </div>
+    <div id="right"></div>
+</body>
+
+<script type="text/javascript">
+    $(function() {
+        var i = 0;
+        $("#left")
+            .children()
+            .draggable({
+                helper: "clone",
+                scope: "ss"
+            });
+        $("#right").droppable({
+            scope: "ss",
+            drop: function(event, ui) {
+                i++;
+                var left = parseInt(ui.offset.left - $(this).offset().left);
+                var top = parseInt(ui.offset.top - $(this).offset().top);
+                var id = $(ui.helper).html() + 'index' + i;
+                var node = $('<div class="node"  id="' + id + '" >' + $(ui.helper).html() +
+                    '</div>');
+                var childOffset = 50;
+                node.css({
+                    left: left,
+                    top: top
+                });
+                $(this).append(node);
+                jsPlumb.draggable(id);
+                $("#" + id).draggable({
+                    containment: "parent"
+                });
+            }
+        });
+
+        // 实例化套索
+        var context = $('#right');
+        const lasso = new Lasso({
+            keycode: 16,
+            context: context,
+            nodeClassName: 'node',
+            checkedClassName: 'lasso_checked_nodes'
+        });
+        lasso.create();
+        lasso.getCheckedNode((node) => {
+            console.log(node, 'nodess');
+        });
+    });
+</script>
+
+</html>
