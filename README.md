@@ -18,5 +18,5 @@ lasso.getCheckedNode((node) => {
 });
 ```
 
-1. press shift and drop mouse to choose item
+1. press shift and drag mouse to choose item
 2. press ctrl + v to emit copy listener
