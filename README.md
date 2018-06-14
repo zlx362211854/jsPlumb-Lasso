@@ -17,3 +17,6 @@ lasso.getCheckedNode((node) => {
     console.log(node, 'nodess');
 });
 ```
+
+1. press shift and drop mouse to choose item
+2. press ctrl + v to emit copy listener
